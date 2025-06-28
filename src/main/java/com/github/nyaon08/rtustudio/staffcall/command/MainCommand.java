@@ -2,14 +2,20 @@ package com.github.nyaon08.rtustudio.staffcall.command;
 
 import com.github.nyaon08.rtustudio.staffcall.StaffCall;
 import com.github.nyaon08.rtustudio.staffcall.data.Help;
+import com.github.nyaon08.rtustudio.staffcall.inventory.StaffInventory;
 import kr.rtuserver.framework.bukkit.api.command.RSCommand;
 import kr.rtuserver.framework.bukkit.api.command.RSCommandData;
 import kr.rtuserver.framework.bukkit.api.format.ComponentFormatter;
+import kr.rtuserver.framework.bukkit.api.player.RSPlayer;
+import kr.rtuserver.protoweaver.api.proxy.ProxyLocation;
+import kr.rtuserver.protoweaver.api.proxy.ProxyPlayer;
 import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Date;
@@ -43,9 +49,9 @@ public class MainCommand extends RSCommand<StaffCall> {
                             if (!getPlugin().getStaffManager().contains(uuid)) {
                                 return;
                             }
-                            getPlugin().getStaffManager().remove(uuid);
-                            player.teleport(player().getLocation());
-                            chat().announce(player(), ComponentFormatter.mini(message().get(player(), "staffAccept").replace("%player%", player.getName())));
+
+                            player().openInventory(new StaffInventory(getPlugin(), player()).getInventory());
+
                         }))
                         .hoverEvent(HoverEvent.showText(Component.text("사유 : " + reason + "\n클릭하여 이동")));
 

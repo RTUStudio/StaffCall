@@ -24,10 +24,11 @@ public class StaffCall extends RSPlugin {
 
     @Override
     public void enable() {
+        getConfigurations().getStorage().init("staffcall");
         iconConfig = new IconConfig(this);
         staffManager = new StaffManager(this);
 
-        registerPermission(getPlugin().getName() + ".help.receive", PermissionDefault.FALSE);
+        registerPermission(getPlugin().getName() + ".help.receive", PermissionDefault.OP);
 
         registerCommand(new MainCommand(this), true);
         registerCommand(new StaffCommand(this));

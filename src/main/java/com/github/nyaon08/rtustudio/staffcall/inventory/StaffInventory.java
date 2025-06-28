@@ -6,10 +6,14 @@ import com.github.nyaon08.rtustudio.staffcall.data.Help;
 import com.github.nyaon08.rtustudio.staffcall.manager.StaffManager;
 import kr.rtuserver.framework.bukkit.api.format.ComponentFormatter;
 import kr.rtuserver.framework.bukkit.api.inventory.RSInventory;
+import kr.rtuserver.framework.bukkit.api.player.RSPlayer;
+import kr.rtuserver.protoweaver.api.proxy.ProxyPlayer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.collections4.ListUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -133,10 +137,16 @@ public class StaffInventory extends RSInventory<StaffCall> {
                 Help help = list.get(slot);
 
                 getPlugin().getStaffManager().remove(help.uuid());
-                Player target = getPlugin().getServer().getPlayer(help.uuid());
 
-                event.player().teleport(Objects.requireNonNull(target).getLocation());
-                chat().announce(target, ComponentFormatter.mini(message().get(target, "staffAccept").replace("%player%", event.player().getName())));
+                RSPlayer rsPlayer = new RSPlayer(player);
+                ProxyPlayer pp = RSPlayer.getPlayer(help.uuid());
+
+                Location location = new Location(Bukkit.getWorld("world"), 0, 64, 0);
+                System.out.println(location.toVector());
+
+                rsPlayer.teleport(pp);
+
+//                chat().announce(target, ComponentFormatter.mini(message().get(target, "staffAccept").replace("%player%", event.player().getName())));
 
                 loadPage(Math.min(page, maxPage));
             }
